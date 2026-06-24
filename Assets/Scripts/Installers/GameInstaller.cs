@@ -70,6 +70,9 @@ namespace Installers
             
             Container.BindInterfacesTo<ConnectionInputService>()
                 .AsSingle();
+            
+            Container.BindInterfacesTo<CameraMoveService>()
+                .AsSingle();
         }
 
         private void Reset()
