@@ -302,6 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_camera: {fileID: 4796405414607977317}
   m_pawnsRoot: {fileID: 822954542}
+  m_connectionsRoot: {fileID: 1622225933}
   m_pawnPrefab: {fileID: 7802187969786674222, guid: fd1d446f181d0a04e96ba8aa605b1c68,
     type: 3}
   m_settings: {fileID: 11400000, guid: c3b00c709b1f94f22a212add39c80449, type: 2}
@@ -376,6 +377,37 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 956628252}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1622225932
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1622225933}
+  m_Layer: 0
+  m_Name: ConnectionsRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1622225933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1622225932}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -467,3 +499,4 @@ SceneRoots:
   - {fileID: 908532502}
   - {fileID: 822954542}
   - {fileID: 956628254}
+  - {fileID: 1622225933}

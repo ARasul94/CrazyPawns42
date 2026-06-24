@@ -1,8 +1,11 @@
 ﻿using EntryPoints;
+using Factories.ConnectionLineFactory;
 using Factories.PawnFactory;
 using Services;
 using Services.BoardBoundsService;
+using Services.ConnectionService;
 using Services.InputRaycastService;
+using Services.PawnRegistryService;
 using UnityEngine;
 using Views;
 using Zenject;
@@ -14,6 +17,7 @@ namespace Installers
         [Header("Scene")]
         [SerializeField] private Camera m_camera;
         [SerializeField] private Transform m_pawnsRoot;
+        [SerializeField] private Transform m_connectionsRoot;
 
         [Header("Templates")]
         [SerializeField] private PawnView m_pawnPrefab;
@@ -36,6 +40,19 @@ namespace Installers
                 .To<PawnFactory>()
                 .AsSingle()
                 .WithArguments(m_pawnPrefab, m_pawnsRoot);
+            
+            Container.Bind<IPawnRegistryService>()
+                .To<PawnRegistryService>()
+                .AsSingle();
+
+            Container.Bind<IConnectionLineFactory>()
+                .To<ConnectionLineFactory>()
+                .AsSingle()
+                .WithArguments(m_connectionsRoot);
+
+            Container.Bind<IConnectionService>()
+                .To<ConnectionService>()
+                .AsSingle();
 
             Container.Bind<PawnSpawnService>()
                 .AsSingle();
@@ -44,6 +61,9 @@ namespace Installers
                 .AsSingle();
 
             Container.BindInterfacesTo<GameEntryPoint>()
+                .AsSingle();
+            
+            Container.BindInterfacesTo<ConnectionInputService>()
                 .AsSingle();
         }
 

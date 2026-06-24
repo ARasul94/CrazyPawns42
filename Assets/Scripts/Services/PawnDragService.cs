@@ -1,5 +1,7 @@
 ﻿using Services.BoardBoundsService;
+using Services.ConnectionService;
 using Services.InputRaycastService;
+using Services.PawnRegistryService;
 using UnityEngine;
 using Views;
 using Zenject;
@@ -10,16 +12,22 @@ namespace Services
     {
         private readonly IInputRaycastService m_inputRaycastService;
         private readonly IBoardBoundsService m_boardBoundsService;
+        private readonly IConnectionService m_connectionService;
+        private readonly IPawnRegistryService m_pawnRegistryService;
 
         private PawnView m_draggedPawn;
         private Vector3 m_dragOffset;
 
         public PawnDragService(
             IInputRaycastService _inputRaycastService,
-            IBoardBoundsService _boardBoundsService)
+            IBoardBoundsService _boardBoundsService,
+            IConnectionService _connectionService,
+            IPawnRegistryService _pawnRegistryService)
         {
             m_inputRaycastService = _inputRaycastService;
             m_boardBoundsService = _boardBoundsService;
+            m_connectionService =  _connectionService;
+            m_pawnRegistryService = _pawnRegistryService;
         }
 
         public void Tick()
@@ -71,7 +79,11 @@ namespace Services
             m_draggedPawn = null;
 
             if (shouldDelete)
+            {
+                m_connectionService.RemoveConnectionsOf(pawnToRelease);
+                m_pawnRegistryService.Unregister(pawnToRelease);
                 pawnToRelease.DestroyView();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using ViewModels;
@@ -16,6 +17,9 @@ namespace Views
         private PawnViewModel m_viewModel;
         private Material m_deleteMaterial;
 
+        public event Action<PawnView> Destroying;
+        
+        public bool isDestroyed { get; private set; }
         public int id => m_viewModel.id;
         public PawnViewModel viewModel => m_viewModel;
         public IReadOnlyList<ConnectorView> connectors => m_connectors;
@@ -52,6 +56,11 @@ namespace Views
 
         public void DestroyView()
         {
+            if (isDestroyed)
+                return;
+
+            isDestroyed = true;
+            Destroying?.Invoke(this);
             Destroy(gameObject);
         }
 
