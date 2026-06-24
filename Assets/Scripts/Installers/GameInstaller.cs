@@ -18,6 +18,7 @@ namespace Installers
         [SerializeField] private Camera m_camera;
         [SerializeField] private Transform m_pawnsRoot;
         [SerializeField] private Transform m_connectionsRoot;
+        [SerializeField] private BoardView m_boardView;
 
         [Header("Templates")]
         [SerializeField] private PawnView m_pawnPrefab;
@@ -27,6 +28,7 @@ namespace Installers
         {
             Container.BindInstance(m_settings).AsSingle();
             Container.BindInstance(m_camera).AsSingle();
+            Container.BindInstance(m_boardView).AsSingle();
 
             Container.Bind<IInputRaycastService>()
                 .To<InputRaycastService>()
@@ -55,6 +57,9 @@ namespace Installers
                 .AsSingle();
 
             Container.Bind<PawnSpawnService>()
+                .AsSingle();
+            
+            Container.Bind<BoardSpawnService>()
                 .AsSingle();
 
             Container.BindInterfacesTo<PawnDragService>()
