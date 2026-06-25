@@ -1,4 +1,5 @@
 ﻿using Services.InputRaycastService;
+using Services.InteractionService;
 using UnityEngine;
 using Views;
 using Zenject;
@@ -13,18 +14,20 @@ namespace Services
         
         private readonly Camera m_camera;
         private readonly IInputRaycastService m_inputRaycastService;
+        private readonly IInteractionStateService m_interactionStateService;
 
         private readonly Plane m_groundPlane = new(Vector3.up, Vector3.zero);
-
-        private bool m_isPanning;
+        
         private Vector3 m_previousGroundPoint;
 
         public CameraMoveService(
             Camera _camera,
-            IInputRaycastService _inputRaycastService)
+            IInputRaycastService _inputRaycastService,
+            IInteractionStateService _interactionStateService)
         {
             m_camera = _camera;
             m_inputRaycastService = _inputRaycastService;
+            m_interactionStateService = _interactionStateService;
         }
 
         public void Tick()
@@ -38,22 +41,27 @@ namespace Services
             if (Input.GetMouseButtonDown(0))
                 TryStartPan();
 
-            if (m_isPanning && Input.GetMouseButton(0))
+            if (m_interactionStateService.isCameraPanning && Input.GetMouseButton(0))
                 UpdatePan();
 
-            if (m_isPanning && Input.GetMouseButtonUp(0))
-                m_isPanning = false;
+            if (m_interactionStateService.isCameraPanning && Input.GetMouseButtonUp(0))
+                m_interactionStateService.End(InteractionMode.CAMERA_PAN);
         }
 
         private void TryStartPan()
         {
+            if (!m_interactionStateService.isFree)
+                return;
+            
             if (IsPointerOverInteractiveObject())
                 return;
 
             if (!TryGetMousePointOnGround(out var groundPoint))
                 return;
 
-            m_isPanning = true;
+            if (!m_interactionStateService.TryBegin(InteractionMode.CAMERA_PAN))
+                return;
+            
             m_previousGroundPoint = groundPoint;
         }
 

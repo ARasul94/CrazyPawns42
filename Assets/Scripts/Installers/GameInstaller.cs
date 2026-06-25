@@ -3,8 +3,10 @@ using Factories.ConnectionLineFactory;
 using Factories.PawnFactory;
 using Services;
 using Services.BoardBoundsService;
+using Services.ConnectionPreviewService;
 using Services.ConnectionService;
 using Services.InputRaycastService;
+using Services.InteractionService;
 using Services.PawnRegistryService;
 using UnityEngine;
 using Views;
@@ -51,9 +53,18 @@ namespace Installers
                 .To<ConnectionLineFactory>()
                 .AsSingle()
                 .WithArguments(m_connectionsRoot);
+            
+            Container.Bind<IConnectionPreviewService>()
+                .To<ConnectionPreviewService>()
+                .AsSingle()
+                .WithArguments(m_connectionsRoot);
 
             Container.Bind<IConnectionService>()
                 .To<ConnectionService>()
+                .AsSingle();
+            
+            Container.Bind<IInteractionStateService>()
+                .To<InteractionStateService>()
                 .AsSingle();
 
             Container.Bind<PawnSpawnService>()
@@ -73,6 +84,10 @@ namespace Installers
             
             Container.BindInterfacesTo<CameraMoveService>()
                 .AsSingle();
+            
+            Container.BindExecutionOrder<ConnectionInputService>(-30);
+            Container.BindExecutionOrder<PawnDragService>(-20);
+            Container.BindExecutionOrder<CameraMoveService>(-10);
         }
 
         private void Reset()

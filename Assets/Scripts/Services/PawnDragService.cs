@@ -1,6 +1,7 @@
 ﻿using Services.BoardBoundsService;
 using Services.ConnectionService;
 using Services.InputRaycastService;
+using Services.InteractionService;
 using Services.PawnRegistryService;
 using UnityEngine;
 using Views;
@@ -14,6 +15,7 @@ namespace Services
         private readonly IBoardBoundsService m_boardBoundsService;
         private readonly IConnectionService m_connectionService;
         private readonly IPawnRegistryService m_pawnRegistryService;
+        private readonly IInteractionStateService m_interactionStateService;
 
         private PawnView m_draggedPawn;
         private Vector3 m_dragOffset;
@@ -22,12 +24,14 @@ namespace Services
             IInputRaycastService _inputRaycastService,
             IBoardBoundsService _boardBoundsService,
             IConnectionService _connectionService,
-            IPawnRegistryService _pawnRegistryService)
+            IPawnRegistryService _pawnRegistryService,
+            IInteractionStateService _interactionStateService)
         {
             m_inputRaycastService = _inputRaycastService;
             m_boardBoundsService = _boardBoundsService;
             m_connectionService =  _connectionService;
             m_pawnRegistryService = _pawnRegistryService;
+            m_interactionStateService = _interactionStateService;
         }
 
         public void Tick()
@@ -44,6 +48,9 @@ namespace Services
 
         private void TryStartDrag()
         {
+            if (!m_interactionStateService.isFree)
+                return;
+            
             if (!m_inputRaycastService.RaycastFromMouse(out var hit))
                 return;
 
@@ -53,6 +60,9 @@ namespace Services
                 return;
 
             if (!m_inputRaycastService.TryGetMousePointOnGround(out var groundPoint))
+                return;
+            
+            if (!m_interactionStateService.TryBegin(InteractionMode.PAWN_DRAG))
                 return;
 
             m_draggedPawn = pawn;
@@ -75,6 +85,8 @@ namespace Services
         {
             var shouldDelete = m_draggedPawn.viewModel.isOutsideBoard.Value;
             var pawnToRelease = m_draggedPawn;
+            
+            m_interactionStateService.End(InteractionMode.PAWN_DRAG);
 
             m_draggedPawn = null;
 
