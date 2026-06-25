@@ -8,6 +8,7 @@ using Services.ConnectionService;
 using Services.InputRaycastService;
 using Services.InteractionService;
 using Services.PawnRegistryService;
+using Settings;
 using UnityEngine;
 using Views;
 using Zenject;
@@ -18,6 +19,7 @@ namespace Installers
     {
         [Header("Scene")]
         [SerializeField] private Camera m_camera;
+        [SerializeField] private CameraMoveSettings m_cameraMoveSettings;
         [SerializeField] private Transform m_pawnsRoot;
         [SerializeField] private Transform m_connectionsRoot;
         [SerializeField] private BoardView m_boardView;
@@ -31,6 +33,7 @@ namespace Installers
             Container.BindInstance(m_settings).AsSingle();
             Container.BindInstance(m_camera).AsSingle();
             Container.BindInstance(m_boardView).AsSingle();
+            Container.BindInstance(m_cameraMoveSettings).AsSingle();
 
             Container.Bind<IInputRaycastService>()
                 .To<InputRaycastService>()

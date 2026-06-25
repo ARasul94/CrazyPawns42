@@ -1,5 +1,6 @@
 ﻿using Services.InputRaycastService;
 using Services.InteractionService;
+using Settings;
 using UnityEngine;
 using Views;
 using Zenject;
@@ -8,11 +9,8 @@ namespace Services
 {
     public class CameraMoveService : ITickable
     {
-        private const float ZOOM_SPEED = 3f;
-        private const float MIN_CAMERA_HEIGHT = 3f;
-        private const float MAX_CAMERA_HEIGHT = 35f;
-        
         private readonly Camera m_camera;
+        private readonly CameraMoveSettings m_settings;
         private readonly IInputRaycastService m_inputRaycastService;
         private readonly IInteractionStateService m_interactionStateService;
 
@@ -22,10 +20,12 @@ namespace Services
 
         public CameraMoveService(
             Camera _camera,
+            CameraMoveSettings _settings,
             IInputRaycastService _inputRaycastService,
             IInteractionStateService _interactionStateService)
         {
             m_camera = _camera;
+            m_settings = _settings;
             m_inputRaycastService = _inputRaycastService;
             m_interactionStateService = _interactionStateService;
         }
@@ -88,9 +88,9 @@ namespace Services
                 return;
 
             var direction = (targetPoint - m_camera.transform.position).normalized;
-            var nextPosition = m_camera.transform.position + direction * (scroll * ZOOM_SPEED);
+            var nextPosition = m_camera.transform.position + direction * (scroll * m_settings.zoomSpeed);
 
-            if (nextPosition.y < MIN_CAMERA_HEIGHT || nextPosition.y > MAX_CAMERA_HEIGHT)
+            if (nextPosition.y < m_settings.minCameraHeight || nextPosition.y > m_settings.maxCameraHeight)
                 return;
 
             m_camera.transform.position = nextPosition;

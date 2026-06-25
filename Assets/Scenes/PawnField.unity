@@ -240,6 +240,12 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &716313018 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4420021947619040812, guid: 368457728b5d74561b805d9bb789017e,
+    type: 3}
+  m_PrefabInstance: {fileID: 4796405414607977316}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &822954541
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,6 +307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_camera: {fileID: 4796405414607977317}
+  m_cameraMoveSettings: {fileID: 4796405414607977320}
   m_pawnsRoot: {fileID: 822954542}
   m_connectionsRoot: {fileID: 1622225933}
   m_boardView: {fileID: 2082649274}
@@ -527,7 +534,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4420021947619040812, guid: 368457728b5d74561b805d9bb789017e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4796405414607977320}
   m_SourcePrefab: {fileID: 100100000, guid: 368457728b5d74561b805d9bb789017e, type: 3}
 --- !u!20 &4796405414607977317 stripped
 Camera:
@@ -535,6 +546,21 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 4796405414607977316}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4796405414607977320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716313018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 723f07614adf41eea71edab236e836cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <zoomSpeed>k__BackingField: 3
+  <minCameraHeight>k__BackingField: 3
+  <maxCameraHeight>k__BackingField: 35
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
