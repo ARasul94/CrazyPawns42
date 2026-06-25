@@ -1,4 +1,5 @@
 ﻿using Services.ConnectionPreviewService;
+using Services.ConnectionSelectionService;
 using Services.ConnectionService;
 using Services.InputRaycastService;
 using Services.InteractionService;
@@ -9,7 +10,7 @@ using Zenject;
 
 namespace Services
 {
-    public class ConnectionInputService : ITickable
+    public class ConnectionInputService : ITickable, IConnectionSelectionService
     {
         private const float DRAG_THRESHOLD = 8f;
 
@@ -57,6 +58,28 @@ namespace Services
                 OnMouseUp();
 
             m_connectionService.UpdateLines();
+        }
+        
+        public void CancelSelectionIfRelatedTo(PawnView _pawn)
+        {
+            if (_pawn == null)
+                return;
+
+            var selectedOwner = m_selectedConnector != null ? m_selectedConnector.owner : null;
+            var pressedOwner = m_pressedConnector != null ? m_pressedConnector.owner : null;
+
+            if (selectedOwner != _pawn && pressedOwner != _pawn)
+                return;
+
+            CancelSelection();
+        }
+
+        public void CancelSelection()
+        {
+            if (m_interactionStateService.isConnectionDragging)
+                m_interactionStateService.End(InteractionMode.CONNECTION_DRAG);
+
+            ClearSelection();
         }
 
         private void OnMouseDown()

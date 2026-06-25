@@ -1,4 +1,5 @@
 ﻿using Services.BoardBoundsService;
+using Services.ConnectionSelectionService;
 using Services.ConnectionService;
 using Services.InputRaycastService;
 using Services.InteractionService;
@@ -16,6 +17,7 @@ namespace Services
         private readonly IConnectionService m_connectionService;
         private readonly IPawnRegistryService m_pawnRegistryService;
         private readonly IInteractionStateService m_interactionStateService;
+        private readonly IConnectionSelectionService m_connectionSelectionService;
 
         private PawnView m_draggedPawn;
         private Vector3 m_dragOffset;
@@ -25,13 +27,15 @@ namespace Services
             IBoardBoundsService _boardBoundsService,
             IConnectionService _connectionService,
             IPawnRegistryService _pawnRegistryService,
-            IInteractionStateService _interactionStateService)
+            IInteractionStateService _interactionStateService,
+            IConnectionSelectionService _connectionSelectionService)
         {
             m_inputRaycastService = _inputRaycastService;
             m_boardBoundsService = _boardBoundsService;
             m_connectionService =  _connectionService;
             m_pawnRegistryService = _pawnRegistryService;
             m_interactionStateService = _interactionStateService;
+            m_connectionSelectionService =  _connectionSelectionService;
         }
 
         public void Tick()
@@ -92,6 +96,7 @@ namespace Services
 
             if (shouldDelete)
             {
+                m_connectionSelectionService.CancelSelectionIfRelatedTo(pawnToRelease);
                 m_connectionService.RemoveConnectionsOf(pawnToRelease);
                 m_pawnRegistryService.Unregister(pawnToRelease);
                 pawnToRelease.DestroyView();

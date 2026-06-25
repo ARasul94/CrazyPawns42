@@ -82,7 +82,7 @@ namespace Installers
             Container.BindInterfacesTo<GameEntryPoint>()
                 .AsSingle();
             
-            Container.BindInterfacesTo<ConnectionInputService>()
+            Container.BindInterfacesAndSelfTo<ConnectionInputService>()
                 .AsSingle();
             
             Container.BindInterfacesTo<CameraMoveService>()
