@@ -77,8 +77,8 @@ namespace Services
             var targetPosition = groundPoint + m_dragOffset;
             targetPosition.y = 0f;
 
-            m_draggedPawn.viewModel.position.Value = targetPosition;
-            m_draggedPawn.viewModel.isOutsideBoard.Value = !m_boardBoundsService.Contains(targetPosition);
+            m_draggedPawn.viewModel.SetPosition(targetPosition);
+            m_draggedPawn.viewModel.SetIsOutsideBoard(!m_boardBoundsService.Contains(targetPosition));
         }
 
         private void FinishDrag()
