@@ -50,7 +50,7 @@ namespace Services
             if (m_pressedConnector != null && Input.GetMouseButton(0))
                 UpdateConnectionDragState();
             
-            if (m_interactionStateService.isConnectionDragging)
+            if (m_selectedConnector != null)
                 m_connectionPreviewService.Update();
 
             if (Input.GetMouseButtonUp(0))
@@ -77,10 +77,16 @@ namespace Services
             if (!m_interactionStateService.isFree)
                 return;
 
-            m_selectedConnector = connector;
-            m_pressedConnector = connector;
+            StartConnectionSelection(connector);
+        }
+        
+        private void StartConnectionSelection(ConnectorView _connector)
+        {
+            m_selectedConnector = _connector;
+            m_pressedConnector = _connector;
 
-            HighlightAvailableConnectors(connector);
+            HighlightAvailableConnectors(_connector);
+            m_connectionPreviewService.Show(_connector);
         }
         
         private void UpdateConnectionDragState()
@@ -93,8 +99,7 @@ namespace Services
             if (distance < DRAG_THRESHOLD)
                 return;
 
-            if (m_interactionStateService.TryBegin(InteractionMode.CONNECTION_DRAG))
-                m_connectionPreviewService.Show(m_pressedConnector);
+            m_interactionStateService.TryBegin(InteractionMode.CONNECTION_DRAG);
         }
 
         private void OnMouseUp()
@@ -119,8 +124,7 @@ namespace Services
             var targetConnector = TryGetConnectorUnderMouse();
 
             m_connectionService.TryCreateConnection(m_pressedConnector, targetConnector);
-
-            m_connectionPreviewService.Hide();
+            
             ClearSelection();
             m_interactionStateService.End(InteractionMode.CONNECTION_DRAG);
         }
@@ -129,7 +133,9 @@ namespace Services
         {
             m_hasPendingSecondClick = false;
 
-            if (m_interactionStateService.isPawnDragging || m_interactionStateService.isCameraPanning)
+            var isRealDrag = IsPointerMovedEnoughForDrag();
+
+            if (isRealDrag && (m_interactionStateService.isPawnDragging || m_interactionStateService.isCameraPanning))
                 return;
 
             var targetConnector = TryGetConnectorUnderMouse();
@@ -138,6 +144,12 @@ namespace Services
                 m_connectionService.TryCreateConnection(m_selectedConnector, targetConnector);
 
             ClearSelection();
+        }
+        
+        private bool IsPointerMovedEnoughForDrag()
+        {
+            var distance = Vector3.Distance(m_pressScreenPosition, Input.mousePosition);
+            return distance >= DRAG_THRESHOLD;
         }
 
         private ConnectorView TryGetConnectorUnderMouse()
